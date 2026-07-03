@@ -100,8 +100,9 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Full composer install (with dev deps)
 COPY backend/composer.json backend/composer.lock /var/www/html/
-RUN composer install --no-interaction --no-scripts
+# RUN composer install --no-interaction --no-scripts
 
-COPY docker/backend/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+# COPY docker/backend/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 USER slms
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
