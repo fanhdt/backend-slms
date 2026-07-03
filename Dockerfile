@@ -7,7 +7,8 @@ WORKDIR /app
 
 # Copy only composer files first to leverage Docker layer caching.
 # If composer.json/lock hasn't changed, this layer is reused.
-COPY backend/composer.json backend/composer.lock ./
+# BENAR
+COPY composer.json composer.lock ./
 
 RUN composer install \
     --no-dev \
@@ -68,7 +69,8 @@ WORKDIR /var/www/html
 COPY --from=composer --chown=slms:slms /app/vendor ./vendor
 
 # ---- Copy application code ----
-COPY --chown=slms:slms backend/ .
+# BENAR
+COPY --chown=slms:slms . .
 
 # ---- Directories that Laravel writes to ----
 RUN mkdir -p storage/logs storage/framework/{cache,sessions,views} \
@@ -99,7 +101,7 @@ RUN apk add --no-cache $PHPIZE_DEPS linux-headers \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Full composer install (with dev deps)
-COPY backend/composer.json backend/composer.lock /var/www/html/
+COPY composer.json composer.lock /var/www/html/
 # RUN composer install --no-interaction --no-scripts
 
 # COPY docker/backend/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
